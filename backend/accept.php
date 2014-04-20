@@ -7,16 +7,10 @@ $i=0;
 $k=0;
 $us=$_SESSION['vol_usr'];
 $psw=$_SESSION['vol_pass'];
-/*for($f=0;$f<=3;$f++)
-{
 
-$nam[$i]=$_SESSION['x'][$f];
-echo $nam[$i];
-$i++;
-}*/
 $z=$_GET['search'];
 $accept_event=$_SESSION['x'][$z];
-echo "received=".$z;
+echo "received=".$z;     //displays the index received from  'vol_login_jump.php'
 $name=$_SESSION['x'][$z];
 
 $con = mysql_connect("localhost","root","");
@@ -52,7 +46,7 @@ while($row = mysql_fetch_array($result))
   echo "<td>" . $row['ph_no'] . "</td>";
   echo "<td>" . $row['evnt_des'] . "</td>";
   echo "<td>" . $row['type_vol'] . "</td>";
-  echo  "<td>" .('<a href="commit.php?comit='.$accept_event.'" >accept</a>')." </td>";
+  echo  "<td>" .('<a href="commit.php?comit='.$accept_event.' && people='.$z.'" >accept</a>')." </td>";
   
   echo  "<td>" .('<a href="vol_login_jump.php?vol_usr='.$us.'&& vol_pass='.$psw.' " >skip</a>')." </td>";
   echo "</tr>";
