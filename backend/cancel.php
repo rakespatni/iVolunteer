@@ -20,13 +20,7 @@ $stlen=$_SESSION['w'][$dead];   //this is the length of the received event
 $i=$_GET['siz'];
 
 
-$con = mysql_connect("localhost","root","");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-
-mysql_select_db("iv", $con);
+require_once('dbconnect.php');
 
 $result = mysql_query("SELECT * FROM vol where username='$us' and password='$psw'");
 if($row=mysql_fetch_array($result))

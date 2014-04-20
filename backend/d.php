@@ -17,13 +17,7 @@ $z=$_GET['search'];
 echo "received=".$z;
 $name=$_SESSION['x'][$z];
 
-$con = mysql_connect("localhost","root","");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-
-mysql_select_db("iv", $con);
+require_once('dbconnect.php');
 
 $result = mysql_query("SELECT * FROM event where event_id = '$name'");
  

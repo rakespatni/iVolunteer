@@ -7,29 +7,22 @@ $i=0;
 $l=0;
 $chk=0;
 $len=0;
+
 session_start();
 $tarik=date("Y-m-d");
 $_SESSION['tarik']=$tarik;
 
 $user=$_GET['vol_usr'];
 $pass=$_GET['vol_pass'];
+
 $_SESSION['vol_usr']=$user;
 $user=$_SESSION['vol_usr'];
-
 $_SESSION['vol_pass']=$pass;
 
-echo "welcome ".$user;
-$con = mysql_connect("localhost","root","");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-else
- //echo "connection established";
-mysql_select_db("iv", $con);
-
+require_once('dbconnect.php');
 
 $result = mysql_query("SELECT * FROM vol where username='$user' and password='$pass'");
+
 if($row=mysql_fetch_array($result))
 { 
   $occupation=$row['occ'];  //occupation of the volunteer
@@ -161,6 +154,7 @@ echo "</table>";
  else
    echo "wrong username or password";
 mysql_close($con);
+echo "this is".$con;
 ?>
 </body>
 </html>

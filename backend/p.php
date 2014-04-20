@@ -5,14 +5,8 @@
 $f=0;
 $i=0;
 session_start();
-$con = mysql_connect("localhost","root","");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-else
- echo "connection established";
-mysql_select_db("iv", $con);
+
+require_once('dbconnect.php');
 
 $result = mysql_query("SELECT * FROM event");
 

@@ -20,13 +20,7 @@ $commited_event=$_SESSION['y'][$z];
 echo "received=".$z;
 $name=$_SESSION['y'][$z];
 
-$con = mysql_connect("localhost","root","");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-
-mysql_select_db("iv", $con);
+require_once('dbconnect.php');
 
 $result = mysql_query("SELECT * FROM event where event_id = '$name'");
  
