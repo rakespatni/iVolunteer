@@ -5,8 +5,8 @@
 session_start();
 $i=0;
 $k=0;
-$us=$_SESSION['vol_usr'];
-$psw=$_SESSION['vol_pass'];
+$us=$_SESSION['vusr'];
+$psw=$_SESSION['vpass'];
 
 $z=$_GET['search'];
 $accept_event=$_SESSION['x'][$z];
@@ -42,7 +42,7 @@ while($row = mysql_fetch_array($result))
   echo "<td>" . $row['type_vol'] . "</td>";
   echo  "<td>" .('<a href="commit.php?comit='.$accept_event.' && people='.$z.'" >accept</a>')." </td>";
   
-  echo  "<td>" .('<a href="vol_login_jump.php?vol_usr='.$us.'&& vol_pass='.$psw.' " >skip</a>')." </td>";
+  echo  "<td>" .('<a href="vol_login_jump.php?vusr='.$us.'&& vpass='.$psw.' " >skip</a>')." </td>";
   echo "</tr>";
  }
 echo "</table>";

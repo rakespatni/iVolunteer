@@ -5,8 +5,8 @@
 session_start();
 $i=0;
 $k=0;
-$us=$_SESSION['vol_usr'];
-$psw=$_SESSION['vol_pass'];
+$us=$_SESSION['vusr'];
+$psw=$_SESSION['vpass'];
 
 $comit_event=$_GET['comit'];
 $list="L".$comit_event;      //name of the dynamic list as "L"+event_id (eg L+e1=Le1)
@@ -43,7 +43,7 @@ if($row=mysql_fetch_array($result))
    echo "u are placed in main list and ur position is".$size_of_table;
   else
    echo "u are placed in wait list and ur position is".$size_of_table;
-  echo  '<a href="vol_login_jump.php?vol_usr='.$us.'&& vol_pass='.$psw.' " >go to events page</a>';
+  echo  '<a href="vol_login_jump.php?vusr='.$us.'&& vpass='.$psw.' " >go to events page</a>';
 }
 else
   echo "conn error";

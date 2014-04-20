@@ -6,8 +6,8 @@ session_start();
 $count=0;
 $i=0;
 $k=0;
-$us=$_SESSION['vol_usr'];
-$psw=$_SESSION['vol_pass'];
+$us=$_SESSION['vusr'];
+$psw=$_SESSION['vpass'];
 
 
 $cancel_event=$_GET['cancel'];
@@ -98,7 +98,7 @@ if($row=mysql_fetch_array($result))
  mysql_query("update vol set evnts='$updated_event' where username='$us' and password='$psw' ");
  //removing vol details from relevant list
 mysql_query("delete from $list where name='$vol_name' and phone='$vol_phone' ");
- echo "<br>".'<a href="vol_login_jump.php?vol_usr='.$us.'&& vol_pass='.$psw.' " >Go to profile page</a>'; 
+ echo "<br>".'<a href="vol_login_jump.php?vusr='.$us.'&& vpass='.$psw.' " >Go to profile page</a>'; 
 }  
 else
   echo "conn error";

@@ -1,6 +1,3 @@
-<html>
-
-<body text="white" bgcolor="green">
 <?php
 $count=0;
 $i=0;
@@ -12,16 +9,19 @@ session_start();
 $tarik=date("Y-m-d");
 $_SESSION['tarik']=$tarik;
 
-$user=$_GET['vol_usr'];
-$pass=$_GET['vol_pass'];
+$user=$_GET['vusr'];
+$pass=$_GET['vpass'];
 
-$_SESSION['vol_usr']=$user;
-$user=$_SESSION['vol_usr'];
-$_SESSION['vol_pass']=$pass;
+$json=$_GET['json'];		/*JSON request variable - equals 1 if the incoming query requests for a JSON string*/
+
+$_SESSION['vusr']=$user;
+$user=$_SESSION['vusr'];
+$_SESSION['vpass']=$pass;
 
 require_once('dbconnect.php');
 
 $result = mysql_query("SELECT * FROM vol where username='$user' and password='$pass'");
+
 
 if($row=mysql_fetch_array($result))
 { 
@@ -54,7 +54,6 @@ if($row=mysql_fetch_array($result))
       }
   }
    
-  //echo "Listing all committed events"; 
   for($k=0;$k<=$i;$k++)
   {
    $event=$arr[$k];
@@ -62,7 +61,7 @@ if($row=mysql_fetch_array($result))
    
    $date=mysql_query("select * from event where event_id='$event' ");
   
-//finding dates of already committed events
+	//finding dates of already committed events
     if($date_fetch=mysql_fetch_array($date))
     {
 	$com_event_deadline[$k]=$date_fetch['deadline'];
@@ -71,8 +70,8 @@ if($row=mysql_fetch_array($result))
 	
 	
     }
-   else 
-    echo "no date";
+   /*else 
+    echo "no date";*/
   }
   if ($len==0)                      //if committed event list is empty
     {$event_dated[0]='';
@@ -89,7 +88,7 @@ if($row=mysql_fetch_array($result))
    
     $chk=0;
   
-//Checking if new posted events clash with any of the already committed events
+	//Checking if new posted events clash with any of the already committed events
   for($b=0;$b<=$i;$b++)
      { 
 	    //echo "posted event date=".$posted_event_date;
@@ -105,6 +104,7 @@ if($row=mysql_fetch_array($result))
 		 continue;
         }
      }
+	
 	if($chk==0)
        {
 	   $ok_event_id[$l]=$rows['event_id'];                //ok_event_id's represent those events for which volunteer is fully eligible to commit to(i,e clash cleared and deadline cleared events)
@@ -115,46 +115,62 @@ if($row=mysql_fetch_array($result))
    }
    
    
- 
- echo "<table border='1'>
- <tr><th>event id</th></tr>";
+	if($json!=1)
+	{	
+		echo "<table border='1'>
+		 <tr><th>event id</th></tr>";
 
- for($m=0;$m<$l;$m++)            //loop to display the available(uncommitted) posts as links as well as for sending the index value to next pages 
- {
- 
-  $_SESSION['x'][$m]=$ok_event_id[$m];
-  
-  $_SESSION['v'][$m]=$strength_needed[$m];
-  echo  "<tr><td>" ;
-  echo  '<a href="accept.php?search='.$m.' "> ' . $ok_event_id[$m]  .'</a>'." </td></tr>";
- } 
+		 for($m=0;$m<$l;$m++)            //loop to display the available(uncommitted) posts as links as well as for sending the index value to next pages 
+		 {
+		 
+			$_SESSION['x'][$m]=$ok_event_id[$m];
+			
+			$_SESSION['v'][$m]=$strength_needed[$m];
+			echo  "<tr><td>" ;
+			echo  '<a href="accept.php?search='.$m.' "> ' . $ok_event_id[$m]  .'</a>'." </td></tr>";
+		 } 
+		 echo " </table>";
+		 // committed events links 
+		 echo "<table border='1'>
+		 <tr><th>Committed events</th></tr>";
 
- 
- echo " </table>";
-// committed events links 
- echo "<table border='1'>
- <tr><th>Committed events</th></tr>";
+		 for($n=0;$n<=$i;$n++)         //displays the committed events as links  and sends the index of committed events to next pages
+		 {
+		 
+			$_SESSION['y'][$n]=$arr[$n];
+			//echo "show=".$_SESSION['y'][$n];
+			$_SESSION['z'][$n]=$com_event_deadline[$n];
+			//echo "deadline=".$_SESSION['z'][$n];
+			$_SESSION['w'][$n]=$len_event[$n];
+		
+			echo  "<tr><td>" ;
+			echo  '<a href="existing.php?exist='.$n.'&&size='.$i.'"> ' . $arr[$n]  .'</a>'." </td></tr>";
+		 } 
+		 
+		echo "</table>";
 
- for($n=0;$n<=$i;$n++)         //displays the committed events as links  and sends the index of committed events to next pages
- {
- 
-  $_SESSION['y'][$n]=$arr[$n];
-  //echo "show=".$_SESSION['y'][$n];
-  $_SESSION['z'][$n]=$com_event_deadline[$n];
-  //echo "deadline=".$_SESSION['z'][$n];
-  $_SESSION['w'][$n]=$len_event[$n];
-  
-  echo  "<tr><td>" ;
-  echo  '<a href="existing.php?exist='.$n.'&&size='.$i.'"> ' . $arr[$n]  .'</a>'." </td></tr>";
- } 
- 
-echo "</table>";
- 
  }
- else
-   echo "wrong username or password";
+	/* Printing the JSON string incase of a JSON request*/
+	else
+ 	{
+	  echo "{";
+		for($m=0;$m<$l;$m++)          
+		 {
+		 
+			$_SESSION['x'][$m]=$ok_event_id[$m];
+			$_SESSION['v'][$m]=$strength_needed[$m];
+			
+			echo '"E'.$m.'":'.'"'. $ok_event_id[$m].'",';
+		 }
+		echo '"count":'.$m;
+		echo "}";
+ 	}
+ 
+ 
+}
+
+else
+	echo "failed";
 mysql_close($con);
-echo "this is".$con;
 ?>
-</body>
-</html>
+
