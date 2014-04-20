@@ -8,28 +8,17 @@ $i=0;
 $k=0;
 $us=$_SESSION['vol_usr'];
 $psw=$_SESSION['vol_pass'];
-/*for($f=0;$f<=3;$f++)
-{
 
-$nam[$i]=$_SESSION['x'][$f];
-echo $nam[$i];
-$i++;
-}*/
-//$z=$_GET['search'];
 
 $cancel_event=$_GET['cancel'];
 $list="L".$cancel_event;
 $dead=$_GET['exis'];
 echo $dead;
 $deadline=$_SESSION['z'][$dead];
-$stlen=$_SESSION['w'][$dead];
-echo "STLEN=".$stlen;
-echo "deadline=".$deadline;
-echo "<br>tarik=".$_SESSION['tarik'];
-echo "got cancel evnt=".$cancel_event;
+$stlen=$_SESSION['w'][$dead];   //this is the length of the received event
+
 $i=$_GET['siz'];
-//echo "received=".$z;
-//$name=$_SESSION['x'][$z];
+
 
 $con = mysql_connect("localhost","root","");
 if (!$con)
@@ -59,33 +48,22 @@ if($row=mysql_fetch_array($result))
 	 $len1=0;
 	 $len2=0;
 	 $str="e5";
-	 //echo "check=".strlen($str);
-     //echo "<br>this is recvd=".$_SESSION['y'][$f];
 	 $r=$_SESSION['y'][$f];
 	 
 	 echo "<br>";
-	 echo "loop  element r=".$r;
-	 echo "cancel ev=".$cancel_event;
-	 //while($cancel_event[$h]!=null)
-	  //$h++;
-	 echo $h;
-	 //$len1=strlen($cancel_event);
 	 echo "<br>";
-	 
-	
 	 echo $len1;
-	 echo "<br>";
 	 $len2=strlen($r);
-	 echo "length2=".$len2;
+	
 	 if($stlen==$len2)
 	 { echo "inside equal len  loop";
 	  for($s=0;$s<$len2;$s++)
 	    {
 		  if($cancel_event[$s]==$r[$s])
-		   echo "inside if   with s=".$s;
-		  else
+             echo "inside if loop";     //just to check the flow of control		   
+		   else
 		   {
-		    echo "inside else with s=".$s;
+		    
 		    $c=1;
 			break;
 		   }
@@ -93,8 +71,7 @@ if($row=mysql_fetch_array($result))
 	 }
 	 else
 	  $c=1;
-     //$c=(strcmp($cancel_event,$r));
-	 echo "c=".$c;
+     
 	 if ($c==0)
 	 { 
 	  
