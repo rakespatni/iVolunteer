@@ -1,112 +1,84 @@
-<html>
-
-<body text="white" bgcolor="green">
 <?php
-session_start();
 $count=0;
 $i=0;
 $k=0;
-$us=$_SESSION['vusr'];
-$psw=$_SESSION['vpass'];
+$tarik=date("Y-m-d");
 
+$user=$_GET['vusr'];
+$pass=$_GET['vpass'];
+$eid=$_GET['eid'];
 
-$cancel_event=$_GET['cancel'];
-$list="L".$cancel_event;
-$dead=$_GET['exis'];
-echo $dead;
-$deadline=$_SESSION['z'][$dead];
-$stlen=$_SESSION['w'][$dead];   //this is the length of the received event
-
-$i=$_GET['siz'];
-
+$list="l".$eid;
 
 require_once('dbconnect.php');
 
-$result = mysql_query("SELECT * FROM vol where username='$us' and password='$psw'");
+$temp=mysql_fetch_array(mysql_query("SELECT deadline FROM event where event_id='$eid'"));
+$deadline=$temp['deadline'];
+
+$result = mysql_query("SELECT * FROM vol where username='$user' and password='$pass'");
 if($row=mysql_fetch_array($result))
 { 
   $vol_name=$row['name'];
   $vol_phone=$row['phno'];
   $com_events=$row['evnts'];
-  $len=strlen($com_events);
-  $updated_event='';
-  echo "Listing your committed events";
-  echo "<br>updated event b4 loop=".$updated_event."<br>";
-  echo "cancel event=".$cancel_event;
-  if($deadline>=$_SESSION['tarik'])
-   {
-    for($f=0;$f<=$i;$f++)
-    { 
-     $h=0;	
-	 $c=0;
-	 $len1=0;
-	 $len2=0;
-	 $str="e5";
-	 $r=$_SESSION['y'][$f];
-	 
-	 echo "<br>";
-	 echo "<br>";
-	 echo $len1;
-	 $len2=strlen($r);
-	
-	 if($stlen==$len2)
-	 { echo "inside equal len  loop";
-	  for($s=0;$s<$len2;$s++)
-	    {
-		  if($cancel_event[$s]==$r[$s])
-             echo "inside if loop";     //just to check the flow of control		   
-		   else
-		   {
-		    
-		    $c=1;
-			break;
-		   }
-		}
-	 }
-	 else
-	  $c=1;
-     
-	 if ($c==0)
-	 { 
-	  
-	   echo "in if";
-        
-     // continue;
-	 }
-	 else
-	 {
-	  
-	  
-	   if($updated_event=='')
-	    $updated_event=$r;
-	   else
-	    $updated_event=$updated_event.','.$r;
-	  //echo " in else";
-	  //echo "in else";
-	   
-	 }
-  echo "<br>";
+	$len=strlen($com_events);
+  $updated_com_events='';
+  $temp_event='';
+  echo "Cancelling event:".$eid;
+  if($tarik<$deadline)
+  {
+		for($f=0;$f<$len;$f++)
+		{
+			/*IF the complete event id has been encountered add it updated_com_events of it is not eid*/
+				/* eid is the event to be removed */			
+			if($com_events[$f]==',')
+			{
+				/*Add all events to updated_com_events except events with event id eid*/
+				if($temp_event != $eid)
+				{
+						/* IF it is the first event in the list of commited events, initialize updated_com_events with temp_event*/
+						if($updated_com_events == '')
+						{
+							$updated_com_events=$updated_com_events.$temp_event;
+							$temp_event='';
+						}
+						/* IF it is not the first event, append temp_event to updated_com_events with a prefix ','*/ 
+						else
+						{
+							$updated_com_events=$updated_com_events.",".$temp_event;
+							$temp_event='';
+						}
+				}
+				else	/*Empty the temp_event*/
+						$temp_event='';
+			}
+			else		/*Build the temp_event string till the complete eid is recorded*/
+				$temp_event=$temp_event.$com_events[$f];
+			
+
+			if(($f+1)==$len)
+			{
+				if($temp_event != $eid)
+				{
+						$updated_com_events=$updated_com_events.",".$temp_event;
+					$temp_event='';
+				}
+			}
+		}	
+	}
+ 	else
+  	echo "<br>Deadline has passed. Cancel Failed<br>";
  
-   }
- }
- else
-   echo "Deadline has passed";
-  if($i==0)
-   $updated_event='';
-  echo "updated event list:".$updated_event; 
- //updating volunteer's committed events after cancelling
- mysql_query("update vol set evnts='$updated_event' where username='$us' and password='$psw' ");
- //removing vol details from relevant list
-mysql_query("delete from $list where name='$vol_name' and phone='$vol_phone' ");
- echo "<br>".'<a href="vol_login_jump.php?vusr='.$us.'&& vpass='.$psw.' " >Go to profile page</a>'; 
+	//updating volunteer's committed events after cancelling
+ 	mysql_query("update vol set evnts='$updated_com_events' where username='$user' and password='$pass' ");
+	//echo "QUERY FOR: ".$list.':'.$vol_name.':'.$vol_phone;
+	//removing vol details from relevant list
+	mysql_query("delete from $list where name='$vol_name' and phone='$vol_phone' ");
+
+ 	echo "<br>".'<a href="vol_login_jump.php?vusr='.$user.'&&vpass='.$pass.' " >Go to profile page</a>'; 
 }  
+
 else
-  echo "conn error";
+	echo "Error";
 mysql_close($con);
- 
-
-
 ?>
-
-</body>
-</html>
