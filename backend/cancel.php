@@ -70,7 +70,12 @@ if($row=mysql_fetch_array($result))
 				echo "Cancelled event number: ".$eid;
 		else
 				echo '{"status":"wd"}';
-		
+
+		/*updating volunteer's committed events after cancelling*/
+ 		mysql_query("update vol set evnts='$updated_com_events' where username='$user' and password='$pass' ");
+
+		/*removing volunteer's entry from list*/
+		mysql_query("delete from $list where name='$vol_name' and phone='$vol_phone' ");
 	}
  	else
   {
@@ -80,12 +85,6 @@ if($row=mysql_fetch_array($result))
 			echo '{"status":"dp"}';
 	}
  
-	/*updating volunteer's committed events after cancelling*/
- 	mysql_query("update vol set evnts='$updated_com_events' where username='$user' and password='$pass' ");
-
-	/*removing volunteer's entry from list*/
-	mysql_query("delete from $list where name='$vol_name' and phone='$vol_phone' ");
-
  	echo "<br>".'<a href="vol_login_jump.php?vusr='.$user.'&&vpass='.$pass.' " >Go to profile page</a>'; 
 }  
 
