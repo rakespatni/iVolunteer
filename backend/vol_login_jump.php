@@ -14,7 +14,7 @@ $json=$_GET['json'];		/*JSON request variable - equals 1 if the incoming query r
 
 require_once('dbconnect.php');
 
-$result = mysql_query("SELECT * FROM vol where username='$user'");
+$result = mysql_query("SELECT * FROM vol where username='$user' and password='$pass'");
 
 
 if($row=mysql_fetch_array($result))

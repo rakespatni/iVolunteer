@@ -7,6 +7,7 @@ $tarik=date("Y-m-d");
 $user=$_GET['vusr'];
 $pass=$_GET['vpass'];
 $eid=$_GET['eid'];
+$json=$_GET['json'];
 
 $list="l".$eid;
 
@@ -24,7 +25,6 @@ if($row=mysql_fetch_array($result))
 	$len=strlen($com_events);
   $updated_com_events='';
   $temp_event='';
-  echo "Cancelling event:".$eid;
   if($tarik<$deadline)
   {
 		for($f=0;$f<$len;$f++)
@@ -65,14 +65,25 @@ if($row=mysql_fetch_array($result))
 				}
 			}
 		}	
+		
+		if($json!=1)
+				echo "Cancelled event number: ".$eid;
+		else
+				echo '{"status":"wd"}';
+		
 	}
  	else
-  	echo "<br>Deadline has passed. Cancel Failed<br>";
+  {
+		if(json!=1)
+			echo "<br>Deadline has passed. Cancel Failed<br>";
+		else
+			echo '{"status":"dp"}';
+	}
  
-	//updating volunteer's committed events after cancelling
+	/*updating volunteer's committed events after cancelling*/
  	mysql_query("update vol set evnts='$updated_com_events' where username='$user' and password='$pass' ");
-	//echo "QUERY FOR: ".$list.':'.$vol_name.':'.$vol_phone;
-	//removing vol details from relevant list
+
+	/*removing volunteer's entry from list*/
 	mysql_query("delete from $list where name='$vol_name' and phone='$vol_phone' ");
 
  	echo "<br>".'<a href="vol_login_jump.php?vusr='.$user.'&&vpass='.$pass.' " >Go to profile page</a>'; 

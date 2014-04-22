@@ -1,5 +1,3 @@
-<html>
-<body text="white" bgcolor="green">
 <?php
 $i=0;
 $k=0;
@@ -15,7 +13,7 @@ require_once('dbconnect.php');
 $temp = mysql_fetch_array(mysql_query("SELECT vol_strength_needed FROM event where event_id='$comit_event'"));
 $limit=$temp['vol_strength_needed'];   
 
-$result = mysql_query("SELECT * FROM vol where username='$user'");
+$result = mysql_query("SELECT * FROM vol where username='$user' and password='$pass'");
 
 if($row=mysql_fetch_array($result))
 { 
@@ -50,16 +48,13 @@ if($row=mysql_fetch_array($result))
 		else
 		{
 			if($size_of_table<=$limit)
-		 		echo '{"pos":{"'.$size_of_table.'"}';
+		 		echo '{"pos":"'.$size_of_table.'"}';
 			else
-		 		echo '{"pos":{"W/L'.($size_of_table-$limit).'"}';
+		 		echo '{"pos":	"W/L'.($size_of_table-$limit).'"}';
 			echo  '<a href="vol_login_jump.php?vusr='.$user.'&&vpass='.$pass.'" >go to events page</a>';
 		}
 }
 else
-  echo "conn error";
+  echo "failed";
 mysql_close($con);
 ?>
-
-</body>
-</html>
