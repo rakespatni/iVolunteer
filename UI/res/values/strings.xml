@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">IVolunteer</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="edit_user">username</string>
+    <string name="edit_pass">password</string>
+    <string name="button_go">Go</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_accept">AcceptActivity</string>
+    <string name="button_accept">Accept</string>
+    <string name="button_go_back">Back</string>
+    <string name="action_showcom">Committed</string>
+
+</resources>
